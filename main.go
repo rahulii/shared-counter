@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"sync"
-	"time"
 	"sync/atomic"
+	"time"
 )
 
 type Counter struct {
-	mu sync.Mutex
+	mu    sync.Mutex
 	value int64
 }
 
@@ -18,11 +18,11 @@ type CounterCAS struct {
 
 func (c *CounterCAS) Inc(wg *sync.WaitGroup) {
 	for {
-        val := atomic.LoadInt64(&c.value)
-        if atomic.CompareAndSwapInt64(&c.value, val, val+1) {
-            break 
-        }
-    }
+		val := atomic.LoadInt64(&c.value)
+		if atomic.CompareAndSwapInt64(&c.value, val, val+1) {
+			break
+		}
+	}
 	wg.Done()
 }
 
@@ -38,7 +38,7 @@ func main() {
 	counterWithLocks()
 
 	// implement a counter with CAS
-	counterWithCAS()	
+	counterWithCAS()
 }
 
 func counterWithLocks() {
@@ -46,7 +46,9 @@ func counterWithLocks() {
 		value: 0,
 	}
 	var wg sync.WaitGroup
-	startTime:= time.Now()
+
+	startTime := time.Now()
+
 	for i := 0; i < 10; i++ {
 		for j := 0; j < 5000000; j++ {
 			wg.Add(1)
